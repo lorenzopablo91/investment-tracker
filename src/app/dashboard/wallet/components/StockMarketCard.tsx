@@ -2,21 +2,17 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
-const StockCard = () => {
-  // Estos valores deberían venir como props o de tu estado global
-  const cotizacionDolar = 1200; // Valor ejemplo del dólar
-  
-  // Valores en pesos
-  const cedearsPesos = 778000;
-  const accionesPesos = 77000;
-  const efectivoPesos = 1000;
-  
-  // Conversión a dólares
-  const cedearsDolares = cedearsPesos / cotizacionDolar;
-  const accionesDolares = accionesPesos / cotizacionDolar;
-  const efectivoDolares = efectivoPesos / cotizacionDolar;
-  
-  const totalDolares = cedearsDolares + accionesDolares + efectivoDolares;
+export interface DollarCardProps {
+  cedearsPesos: number;
+  stockMarketPesos: number;
+  cashPesos: number;
+  cedearsDolares: number;
+  stockMarketDolares: number;
+  cashDolares: number;
+  stockMarketTotal: number;
+}
+
+const StockMarketCard: React.FC<DollarCardProps> = ({ cedearsPesos, stockMarketPesos, cashPesos, cedearsDolares, stockMarketDolares, cashDolares, stockMarketTotal }) => {
 
   return (
     <Card className="w-full max-w-md bg-white">
@@ -26,11 +22,9 @@ const StockCard = () => {
       </CardHeader>
       <CardContent>
         {/* Total */}
-        <div className="mb-6">
-          <div className="text-3xl font-bold text-blue-600">
-            ${totalDolares.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-          </div>
-          <p className="text-sm text-muted-foreground">Balance total en USD (1 USD = ${cotizacionDolar.toLocaleString()} ARS)</p>
+        <div className="mb-6 text-3xl font-bold text-blue-600">
+          ${stockMarketTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          <span className="text-sm text-muted-foreground ml-2">USD</span>
         </div>
 
         {/* Separador */}
@@ -42,7 +36,6 @@ const StockCard = () => {
             <div>
               <p className="font-medium">CEDEARs</p>
               <div className="text-sm text-muted-foreground">
-                <p>{((cedearsDolares / totalDolares) * 100).toFixed(1)}% del total</p>
                 <p className="text-xs">${cedearsPesos.toLocaleString()} ARS</p>
               </div>
             </div>
@@ -55,25 +48,23 @@ const StockCard = () => {
             <div>
               <p className="font-medium">Acciones</p>
               <div className="text-sm text-muted-foreground">
-                <p>{((accionesDolares / totalDolares) * 100).toFixed(1)}% del total</p>
-                <p className="text-xs">${accionesPesos.toLocaleString()} ARS</p>
+                <p className="text-xs">${stockMarketPesos.toLocaleString()} ARS</p>
               </div>
             </div>
             <span className="text-lg font-semibold">
-              ${accionesDolares.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              ${stockMarketDolares.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
           </div>
 
           <div className="flex justify-between items-center">
             <div>
-              <p className="font-medium">Efectivo</p>
+              <p className="font-medium">Fondo Común de Inversión</p>
               <div className="text-sm text-muted-foreground">
-                <p>{((efectivoDolares / totalDolares) * 100).toFixed(1)}% del total</p>
-                <p className="text-xs">${efectivoPesos.toLocaleString()} ARS</p>
+                <p className="text-xs">${cashPesos.toLocaleString()} ARS</p>
               </div>
             </div>
             <span className="text-lg font-semibold">
-              ${efectivoDolares.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              ${cashDolares.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -81,23 +72,23 @@ const StockCard = () => {
         {/* Barra de progreso */}
         <div className="mt-6 space-y-2">
           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden flex">
-            <div 
+            <div
+              className="bg-sky-400 h-full"
+              style={{ width: `${(cedearsDolares / stockMarketTotal) * 100}%` }}
+            />
+            <div
               className="bg-indigo-500 h-full"
-              style={{ width: `${(cedearsDolares / totalDolares) * 100}%` }}
+              style={{ width: `${(stockMarketDolares / stockMarketTotal) * 100}%` }}
             />
-            <div 
-              className="bg-blue-500 h-full"
-              style={{ width: `${(accionesDolares / totalDolares) * 100}%` }}
-            />
-            <div 
-              className="bg-cyan-500 h-full"
-              style={{ width: `${(efectivoDolares / totalDolares) * 100}%` }}
+            <div
+              className="bg-cyan-600 h-full"
+              style={{ width: `${(cashDolares / stockMarketTotal) * 100}%` }}
             />
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>CEDEARs</span>
-            <span>Acciones</span>
-            <span>Efectivo</span>
+            <span>CEDEARs <p>{((cedearsDolares / stockMarketTotal) * 100).toFixed(1)}%</p></span>
+            <span>Acciones <p>{((stockMarketDolares / stockMarketTotal) * 100).toFixed(1)}%</p></span>
+            <span>FCI <p>{((cashDolares / stockMarketTotal) * 100).toFixed(1)}%</p></span>
           </div>
         </div>
       </CardContent>
@@ -105,4 +96,4 @@ const StockCard = () => {
   );
 };
 
-export default StockCard;
+export default StockMarketCard;

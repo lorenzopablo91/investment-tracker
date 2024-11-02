@@ -2,13 +2,14 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
-const DollarCard = () => {
-  // Estos valores deberían venir como props o de tu estado global
-  const dolaresBanco = 645.14;
-  const dolaresBilletes = 300;
-  const dolaresInvertidos = 332.20;
-  
-  const totalDolares = dolaresBanco + dolaresBilletes + dolaresInvertidos;
+export interface DollarCardProps {
+  dollarsBanked: number;
+  dollarCashed: number;
+  dollarInvested: number;
+  dollarTotal: number;
+}
+
+const DollarCard: React.FC<DollarCardProps> = ({ dollarsBanked, dollarCashed, dollarInvested, dollarTotal }) => {
 
   return (
     <Card className="w-full max-w-md bg-white">
@@ -18,11 +19,9 @@ const DollarCard = () => {
       </CardHeader>
       <CardContent>
         {/* Total */}
-        <div className="mb-6">
-          <div className="text-3xl font-bold text-green-600">
-            ${totalDolares.toLocaleString()}
-          </div>
-          <p className="text-sm text-muted-foreground">Balance total en USD</p>
+        <div className="mb-6 text-3xl font-bold text-green-600">
+          ${dollarTotal.toLocaleString()}
+          <span className="text-sm text-muted-foreground ml-2">USD</span>
         </div>
 
         {/* Separador */}
@@ -31,56 +30,53 @@ const DollarCard = () => {
         {/* Desglose */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <div>
-              <p className="font-medium">Banco</p>
-              <p className="text-sm text-muted-foreground">
-                {((dolaresBanco / totalDolares) * 100).toFixed(1)}% del total
-              </p>
-            </div>
-            <span className="text-lg font-semibold">${dolaresBanco.toLocaleString()}</span>
+            <p className="font-medium">Banco</p>
+            <span className="text-lg font-semibold">${dollarsBanked.toLocaleString()}</span>
           </div>
 
           <div className="flex justify-between items-center">
-            <div>
-              <p className="font-medium">Efectivo</p>
-              <p className="text-sm text-muted-foreground">
-                {((dolaresBilletes / totalDolares) * 100).toFixed(1)}% del total
-              </p>
-            </div>
-            <span className="text-lg font-semibold">${dolaresBilletes.toLocaleString()}</span>
+            <p className="font-medium">Efectivo</p>
+            <span className="text-lg font-semibold">${dollarCashed.toLocaleString()}</span>
           </div>
 
           <div className="flex justify-between items-center">
-            <div>
-              <p className="font-medium">Invertido</p>
-              <p className="text-sm text-muted-foreground">
-                {((dolaresInvertidos / totalDolares) * 100).toFixed(1)}% del total
-              </p>
-            </div>
-            <span className="text-lg font-semibold">${dolaresInvertidos.toLocaleString()}</span>
+            <p className="font-medium">Invertido</p>
+            <span className="text-lg font-semibold">${dollarInvested.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Barra de progreso */}
         <div className="mt-6 space-y-2">
           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden flex">
-            <div 
-              className="bg-blue-500 h-full"
-              style={{ width: `${(dolaresBanco / totalDolares) * 100}%` }}
+            <div
+              className="bg-teal-400 h-full"
+              style={{ width: `${(dollarsBanked / dollarTotal) * 100}%` }}
             />
-            <div 
-              className="bg-green-500 h-full"
-              style={{ width: `${(dolaresBilletes / totalDolares) * 100}%` }}
+            <div
+              className="bg-emerald-500 h-full"
+              style={{ width: `${(dollarCashed / dollarTotal) * 100}%` }}
             />
-            <div 
-              className="bg-purple-500 h-full"
-              style={{ width: `${(dolaresInvertidos / totalDolares) * 100}%` }}
+            <div
+              className="bg-lime-600 h-full"
+              style={{ width: `${(dollarInvested / dollarTotal) * 100}%` }}
             />
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Banco</span>
-            <span>Efectivo</span>
-            <span>Invertido</span>
+            <span>Banco
+              <p>
+                {((dollarsBanked / dollarTotal) * 100).toFixed(1)}%
+              </p>
+            </span>
+            <span>Efectivo
+              <p>
+                {((dollarCashed / dollarTotal) * 100).toFixed(1)}%
+              </p>
+            </span>
+            <span>Invertido
+              <p>
+                {((dollarInvested / dollarTotal) * 100).toFixed(1)}%
+              </p>
+            </span>
           </div>
         </div>
       </CardContent>

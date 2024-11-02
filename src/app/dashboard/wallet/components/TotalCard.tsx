@@ -10,7 +10,7 @@ export interface TotalCardProps {
 
 const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTotal }) => {
   const totalWallet = dollarTotal + stockTotal + cryptoTotal;
-  
+
   const categories: Array<{ name: string; amount: number; color: string }> = [
     { name: 'Dólares', amount: dollarTotal, color: 'bg-green-500' },
     { name: 'Acciones', amount: stockTotal, color: 'bg-blue-500' },
@@ -20,19 +20,21 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
   return (
     <Card className="w-full bg-white mb-6">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-2xl font-bold">Balance Total de Billetera</CardTitle>
+        <CardTitle className="text-2xl font-bold">Balance Total</CardTitle>
         <WalletIcon className="h-8 w-8 text-gray-600" />
+        {/* Última actualización */}
+        <div className="mt-4 text-xs text-right text-muted-foreground">
+          Última actualización: {new Date().toLocaleString()}
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="mb-6">
-          <div className="text-4xl font-bold text-gray-800">
-            ${totalWallet.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-          </div>
-          <p className="text-sm text-muted-foreground">Total de todos los activos en USD</p>
+        <div className="mb-6 text-4xl font-bold text-gray-800">
+          ${totalWallet.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          <span className="text-sm text-muted-foreground ml-2">USD</span>
         </div>
 
         {/* Desglose de categorías */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-2">
           {categories.map(category => (
             <div key={category.name} className="text-center">
               <p className="text-sm text-muted-foreground">{category.name}</p>
