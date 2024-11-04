@@ -7,11 +7,11 @@ import CryptoCard from './components/CryptoCard';
 export default function Page() {
   // TODO:Estos valores deberían venir de una API
   // Dollar Card
-  const dollarsBanked: number = 725.14;
+  const dollarsBanked: number = 626.46;
   const dollarCashed: number = 300;
   const dollarInvested: number = 334.20;
 
-  // Stock Card
+  // Stock Market Card
   const dollarQuote: number = 1200;
   const cedearsPesos: number = 770000;
   const stockMarketPesos: number = 80000;
@@ -26,21 +26,21 @@ export default function Page() {
       name: 'Bitcoin',
       symbol: 'BTC',
       amount: 0.01248511,
-      priceUSD: 69639.99, // Precio actual de 1 BTC en USD
+      priceUSD: 69139.99, // Precio actual de 1 BTC en USD
       color: 'bg-orange-500'
     },
     {
       name: 'Ethereum',
       symbol: 'ETH',
       amount: 0.09226684,
-      priceUSD: 2485.60, // Precio actual de 1 ETH en USD
+      priceUSD: 2465.60, // Precio actual de 1 ETH en USD
       color: 'bg-indigo-500'
     },
     {
       name: 'Binance',
       symbol: 'BNB',
       amount: 0.26614746,
-      priceUSD: 567.70, // Precio actual de 1 BNB en USD
+      priceUSD: 558.70, // Precio actual de 1 BNB en USD
       color: 'bg-yellow-500'
     },
     {

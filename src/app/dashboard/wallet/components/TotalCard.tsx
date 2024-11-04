@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { WalletIcon } from '@heroicons/react/24/outline';
+import { InformationCircleIcon, WalletIcon } from '@heroicons/react/24/outline';
+import Modal from '@/components/ui/modal';
 
 export interface TotalCardProps {
   dollarTotal: number;
@@ -20,7 +21,19 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
   return (
     <Card className="w-full bg-white mb-6">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-2xl font-bold">Balance Total</CardTitle>
+        <CardTitle className="flex items-center justify-between text-2xl font-bold">
+          <span className="whitespace-nowrap">Balance Total</span>
+          <div className="p-4">
+            <Modal
+              title="Balance Total"
+              variant="info"
+              icon={<InformationCircleIcon className="h-6 w-6" />}
+              >
+              550 USD son de LALY♥
+            </Modal>
+          </div>
+        </CardTitle>
+
         <WalletIcon className="h-8 w-8 text-gray-600" />
         {/* Última actualización */}
         <div className="mt-4 text-xs text-right text-muted-foreground">
