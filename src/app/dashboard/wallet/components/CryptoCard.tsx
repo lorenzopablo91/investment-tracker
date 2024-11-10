@@ -1,22 +1,9 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
+import { CryptoCardProps } from '../types/interfaces';
 
-export interface DollarCardProps {
-  cryptosCompleted: Array<Crypto>;
-  cryptoTotal: number;
-}
-
-interface Crypto {
-  name: string;
-  symbol: string;
-  amount: number;
-  priceUSD: number;
-  color: string;
-  valueUSD: number
-}
-
-const CryptoCard: React.FC<DollarCardProps> = ({ cryptosCompleted, cryptoTotal }) => {
+const CryptoCard: React.FC<CryptoCardProps> = ({ cryptosCompleted, cryptoTotal }) => {
 
   return (
     <Card className="w-full max-w-md bg-white">
@@ -47,7 +34,7 @@ const CryptoCard: React.FC<DollarCardProps> = ({ cryptosCompleted, cryptoTotal }
                 </div>
               </div>
               <span className="text-lg font-semibold">
-                ${crypto.valueUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                ${crypto.valueUSD?.toLocaleString(undefined, { maximumFractionDigits: 2 })}
               </span>
             </div>
           ))}
@@ -60,13 +47,13 @@ const CryptoCard: React.FC<DollarCardProps> = ({ cryptosCompleted, cryptoTotal }
               <div
                 key={crypto.symbol}
                 className={`${crypto.color} h-full`}
-                style={{ width: `${(crypto.valueUSD / cryptoTotal) * 100}%` }}
+                style={{ width: `${(crypto.valueUSD || 0 / cryptoTotal) * 100}%` }}
               />
             ))}
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
             {cryptosCompleted.map(crypto => (
-              <span key={crypto.symbol}>{crypto.symbol} <p>{((crypto.valueUSD / cryptoTotal) * 100).toFixed(1)}%</p></span>
+              <span key={crypto.symbol}>{crypto.symbol} <p>{((crypto.valueUSD || 0 / cryptoTotal) * 100).toFixed(1)}%</p></span>
             ))}
           </div>
         </div>

@@ -2,12 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { InformationCircleIcon, WalletIcon } from '@heroicons/react/24/outline';
 import Modal from '@/components/ui/modal';
-
-export interface TotalCardProps {
-  dollarTotal: number;
-  stockTotal: number;
-  cryptoTotal: number;
-}
+import { TotalCardProps } from '../types/interfaces';
 
 const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTotal }) => {
   const totalWallet = dollarTotal + stockTotal + cryptoTotal;
@@ -28,7 +23,7 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
               title="Balance Total"
               variant="info"
               icon={<InformationCircleIcon className="h-6 w-6" />}
-              >
+            >
               550 USD son de LALY♥
             </Modal>
           </div>

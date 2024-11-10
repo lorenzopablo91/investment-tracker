@@ -1,18 +1,9 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
+import { StockMarketCardProps } from '../types/interfaces';
 
-export interface DollarCardProps {
-  cedearsPesos: number;
-  stockMarketPesos: number;
-  cashPesos: number;
-  cedearsDolares: number;
-  stockMarketDolares: number;
-  cashDolares: number;
-  stockMarketTotal: number;
-}
-
-const StockMarketCard: React.FC<DollarCardProps> = ({ cedearsPesos, stockMarketPesos, cashPesos, cedearsDolares, stockMarketDolares, cashDolares, stockMarketTotal }) => {
+const StockMarketCard: React.FC<StockMarketCardProps> = ({ cedearsPesos, stockMarketPesos, cashPesos, cedearsDolares, stockMarketDolares, cashDolares, stockMarketTotal }) => {
 
   return (
     <Card className="w-full max-w-md bg-white">
