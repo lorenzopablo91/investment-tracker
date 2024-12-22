@@ -20,9 +20,7 @@ const cryptoMetadata: CryptoMetadata = {
 export const getCryptoData = async (): Promise<CryptoData[]> => {
     try {
         const balances = await getAccountBalances();
-
         const symbols = Object.keys(balances);
-
         const prices = await getCryptoPrices(symbols);
 
         return symbols
@@ -81,26 +79,25 @@ export async function getCryptoPrices(symbols: string[]): Promise<Record<string,
     }
 }
 
-async function getBinanceServerTime(): Promise<number> {
-    const response = await fetch(`${API_CONFIG.BINANCE.BASE_URL}/api/v3/time`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch server time');
-    }
-    const data = await response.json();
-    return data.serverTime;
-}
-
 async function getAccountBalances(): Promise<Record<string, number>> {
     try {
-        // Obtener el tiempo del servidor de Binance
+        // 1. Obtener el tiempo del servidor
         const serverTime = await getBinanceServerTime();
-        const recvWindow = 5000;
 
-        const queryString = `timestamp=${serverTime}&recvWindow=${recvWindow}&omitZeroBalances=true`;
+        // 2. Calcular el offset entre el tiempo local y del servidor
+        const timeOffset = serverTime - Date.now();
+
+        // 3. Crear el timestamp ajustado
+        const timestamp = Date.now() + timeOffset;
+        const recvWindow = 60000; // 60 segundos
+
+        // 4. Construir el query string con el timestamp ajustado
+        const queryString = `timestamp=${timestamp}&recvWindow=${recvWindow}&omitZeroBalances=true`;
         const signature = CryptoJS.HmacSHA256(queryString, API_CONFIG.BINANCE.SECRET_KEY).toString();
 
         const url = `${API_CONFIG.BINANCE.BASE_URL}/api/v3/account?${queryString}&signature=${signature}`;
 
+        // 5. Hacer la petición
         const response = await fetch(url, {
             headers: {
                 'X-MBX-APIKEY': API_CONFIG.BINANCE.API_KEY
@@ -109,11 +106,17 @@ async function getAccountBalances(): Promise<Record<string, number>> {
 
         if (!response.ok) {
             const errorBody = await response.text();
-            console.error('Error response:', {
+            const errorInfo = {
                 status: response.status,
                 statusText: response.statusText,
-                body: errorBody
-            });
+                body: errorBody,
+                timestamp,
+                serverTime,
+                localTime: Date.now(),
+                timeOffset,
+                recvWindow
+            };
+            console.error('Detailed error info:', errorInfo);
             throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
         }
 
@@ -132,4 +135,17 @@ async function getAccountBalances(): Promise<Record<string, number>> {
         console.error('Error en getAccountBalances:', error);
         throw error;
     }
+}
+
+async function getBinanceServerTime(): Promise<number> {
+    const response = await fetch(`${API_CONFIG.BINANCE.BASE_URL}/api/v3/time`, {
+        cache: 'no-store' // Asegura que no se use caché
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch server time');
+    }
+
+    const data = await response.json();
+    return data.serverTime;
 }

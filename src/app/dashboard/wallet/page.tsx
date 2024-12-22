@@ -7,9 +7,6 @@ import { getCryptoData } from './services/binance.service';
 
 export const dynamic = 'force-dynamic';
 
-//secret_key = aXXd7LNMQqfLQcJ8FV8kUFp0croAtEgJc4Ha9BcI22Z295H98VIBIZsKQ82gqD0L
-//api_key = Is7ZaIcufmvuNuHJsRzdWIBngigfx7b8ztsYMHpKbWcnPL4lKlgf47w1X30CtfOY
-
 export default async function Page() {
   // Dollar Card
   const dollarsBanked: number = 1135.46;
