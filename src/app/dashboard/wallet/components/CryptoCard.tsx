@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
 import { CryptoCardProps } from '../types/interfaces';
 
-const CryptoCard: React.FC<CryptoCardProps> = ({ cryptosCompleted, cryptoTotal }) => {
+const CryptoCard: React.FC<CryptoCardProps> = ({ cryptos, cryptoTotal }) => {
 
   return (
     <Card className="w-full max-w-md bg-white">
@@ -23,7 +23,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ cryptosCompleted, cryptoTotal }
 
         {/* Desglose */}
         <div className="space-y-4">
-          {cryptosCompleted.map(crypto => (
+          {cryptos.map(crypto => (
             <div key={crypto.symbol} className="flex justify-between items-center">
               <div>
                 <p className="font-medium">{crypto.name}</p>
@@ -43,7 +43,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ cryptosCompleted, cryptoTotal }
         {/* Barra de progreso */}
         <div className="mt-6 space-y-2">
           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden flex">
-            {cryptosCompleted.map(crypto => (
+            {cryptos.map(crypto => (
               <div
                 key={crypto.symbol}
                 className={`${crypto.color} h-full`}
@@ -52,8 +52,8 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ cryptosCompleted, cryptoTotal }
             ))}
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
-            {cryptosCompleted.map(crypto => (
-              <span key={crypto.symbol}>{crypto.symbol} <p>{((crypto.valueUSD || 0 / cryptoTotal) * 100).toFixed(1)}%</p></span>
+            {cryptos.map(crypto => (
+              <span key={crypto.symbol}>{crypto.symbol} <p>{(((crypto.valueUSD || 0 ) / cryptoTotal) * 100).toFixed(1)}%</p></span>
             ))}
           </div>
         </div>

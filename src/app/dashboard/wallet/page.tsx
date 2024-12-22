@@ -3,69 +3,34 @@ import TotalCard from './components/TotalCard';
 import DollarCard from './components/DollarCard';
 import StockMarketCard from './components/StockMarketCard';
 import CryptoCard from './components/CryptoCard';
-import { getCryptoPrices } from './services/binance.service';
-import { CryptoData } from './types/interfaces';
+import { getCryptoData } from './services/binance.service';
+
+export const dynamic = 'force-dynamic';
+
+//secret_key = aXXd7LNMQqfLQcJ8FV8kUFp0croAtEgJc4Ha9BcI22Z295H98VIBIZsKQ82gqD0L
+//api_key = Is7ZaIcufmvuNuHJsRzdWIBngigfx7b8ztsYMHpKbWcnPL4lKlgf47w1X30CtfOY
 
 export default async function Page() {
   // Dollar Card
-  const dollarsBanked: number = 626.46;
+  const dollarsBanked: number = 1135.46;
   const dollarCashed: number = 300;
-  const dollarInvested: number = 334.20;
+  const dollarInvested: number = 336.20;
 
   // Stock Market Card
   const dollarQuote: number = 1150;
-  const cedearsPesos: number = 780000;
-  const stockMarketPesos: number = 80000;
+  const cedearsPesos: number = 616000;
+  const stockMarketPesos: number = 430000;
   const cashPesos: number = 100000;
   const cedearsDolares = cedearsPesos / dollarQuote;
   const stockMarketDolares = stockMarketPesos / dollarQuote;
   const cashDolares = cashPesos / dollarQuote;
 
-  // Crypto Card
-  const cryptoBase: CryptoData[] = [
-    {
-      name: 'Bitcoin',
-      symbol: 'BTC',
-      amount: 0.01248511,
-      priceUSD: 0,
-      color: 'bg-orange-500'
-    },
-    {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      amount: 0.09226684,
-      priceUSD: 0,
-      color: 'bg-indigo-500'
-    },
-    {
-      name: 'Binance',
-      symbol: 'BNB',
-      amount: 0.26614746,
-      priceUSD: 0,
-      color: 'bg-yellow-500'
-    },
-    {
-      name: 'Solana',
-      symbol: 'SOL',
-      amount: 2.19207844,
-      priceUSD: 0,
-      color: 'bg-purple-500'
-    }
-  ];
-  const symbols = cryptoBase.map(crypto => crypto.symbol);
-  const prices = await getCryptoPrices(symbols);
-
-  // Actualizar cryptos con precios de la API
-  const cryptosCompleted = cryptoBase.map(crypto => ({
-    ...crypto,
-    priceUSD: prices[crypto.symbol],
-    valueUSD: crypto.amount * prices[crypto.symbol]
-  }));
+  const cryptos = await getCryptoData();
 
   // Calcular totales
   const dollarTotal: number = dollarsBanked + dollarCashed + dollarInvested;
   const stockMarketTotal: number = cedearsDolares + stockMarketDolares + cashDolares;
-  const cryptoTotal: number = cryptosCompleted.reduce((acc, curr) => acc + curr.valueUSD, 0);
+  const cryptoTotal: number = cryptos.reduce((acc, curr) => acc + (curr?.valueUSD || 0), 0);
 
   return (
     <main className="container mx-auto p-4">
@@ -92,7 +57,7 @@ export default async function Page() {
           stockMarketTotal={stockMarketTotal}
         />
         <CryptoCard
-          cryptosCompleted={cryptosCompleted}
+          cryptos={cryptos}
           cryptoTotal={cryptoTotal}
         />
       </div>

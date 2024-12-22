@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { InformationCircleIcon, WalletIcon } from '@heroicons/react/24/outline';
 import Modal from '@/components/ui/modal';
 import { TotalCardProps } from '../types/interfaces';
+import ButtonRefresh from '@/components/ui/button-refresh';
 
 const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTotal }) => {
   const totalWallet = dollarTotal + stockTotal + cryptoTotal;
@@ -12,6 +13,7 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
     { name: 'Acciones', amount: stockTotal, color: 'bg-blue-500' },
     { name: 'Crypto', amount: cryptoTotal, color: 'bg-orange-500' }
   ];
+
 
   return (
     <Card className="w-full bg-white mb-6">
@@ -31,8 +33,9 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
 
         <WalletIcon className="h-8 w-8 text-gray-600" />
         {/* Última actualización */}
-        <div className="mt-4 text-xs text-right text-muted-foreground">
-          Última actualización: {new Date().toLocaleString()}
+        <div className="flex items-center justify-between">
+          <ButtonRefresh />
+          <p className="text-xs text-right text-muted-foreground">Última actualización: {new Date().toLocaleString()}</p>
         </div>
       </CardHeader>
       <CardContent>

@@ -12,6 +12,13 @@ export interface CryptoData {
     valueUSD?: number;
 }
 
+export interface CryptoMetadata {
+    [key: string]: {
+      name: string;
+      color: string;
+    };
+  }
+
 export interface StockMarketData {
     cedears: number;
     stockMarket: number;
@@ -20,7 +27,7 @@ export interface StockMarketData {
 }
 
 export interface CryptoCardProps {
-    cryptosCompleted: Array<CryptoData>;
+    cryptos: Array<CryptoData>;
     cryptoTotal: number;
 }
 
@@ -45,4 +52,15 @@ export interface TotalCardProps {
     dollarTotal: number;
     stockTotal: number;
     cryptoTotal: number;
+}
+
+export interface Balance {
+    asset: string;
+    free: string;
+    locked: string;
+}
+
+export interface AccountInfo {
+    balances: Balance[];
+    permissions: string[];
 }
