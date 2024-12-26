@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function Page() {
   // Dollar Card
-  const dollarsBanked: number = 1135.46;
+  const dollarsBanked: number = 1610.19;
   const dollarCashed: number = 300;
-  const dollarInvested: number = 336.20;
+  const dollarInvested: number = 0;
 
   // Stock Market Card
   const dollarQuote: number = 1150;

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,34 +11,24 @@ import { Button } from "./button"
 
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { ModalProps } from '../types/interfaces';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-type ModalSize = 'sm' | 'md' | 'lg';
-type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'info';
+export type ModalSize = 'sm' | 'md' | 'lg';
+export type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'info';
 
-interface ModalProps {
-  buttonText?: string;
-  title: string;
-  children: ReactNode;
-  icon?: ReactNode;
-  size?: ModalSize;
-  variant?: ButtonVariant;
-  buttonSize?: 'default' | 'sm' | 'lg';
-  className?: string;
-}
-
-const Modal = ({ 
-  buttonText, 
-  title, 
-  children, 
+const Modal = ({
+  buttonText,
+  title,
+  children,
   icon,
   size = "sm",
   variant = "info",
   buttonSize = "default",
-  className 
+  className
 }: ModalProps) => {
   const sizeClasses: Record<ModalSize, string> = {
     sm: 'max-w-sm',
@@ -49,7 +39,7 @@ const Modal = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button 
+        <Button
           variant={variant}
           size={buttonSize}
           className={cn(className, "gap-2")}

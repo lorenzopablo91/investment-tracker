@@ -1,5 +1,5 @@
 import { RocketLaunchIcon } from '@heroicons/react/24/outline';
-import { lusitana } from './fonts';
+import { lusitana } from '../fonts';
 
 export default function Logo() {
   return (

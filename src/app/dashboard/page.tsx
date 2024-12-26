@@ -1,4 +1,4 @@
-import { lusitana } from "@/components/ui/fonts";
+import { lusitana } from "@/components/fonts";
 
 export default async function Page() {
   return (
