@@ -37,3 +37,4 @@ next-env.d.ts
 
 # archivo específico
 src/app/dashboard/balance/types/data.ts
+src/app/dashboard/wallet/types/data.ts

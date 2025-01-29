@@ -35,7 +35,6 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
         {/* Última actualización */}
         <div className="flex items-center justify-between">
           <ButtonRefresh />
-          <p className="text-xs text-right text-muted-foreground">Última actualización: {new Date().toLocaleString()}</p>
         </div>
       </CardHeader>
       <CardContent>

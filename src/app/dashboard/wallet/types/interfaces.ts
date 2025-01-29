@@ -64,3 +64,17 @@ export interface AccountInfo {
     balances: Balance[];
     permissions: string[];
 }
+
+export interface WalletData {
+    dollarQuote: number;
+    dollarAmount: {
+        dollarsBanked: number;
+        dollarCashed: number;
+        dollarInvested: number;
+    };
+    stockMarketAmount: {
+        cedearsPesos: number;
+        stockMarketPesos: number;
+        cashPesos: number;
+    }
+}

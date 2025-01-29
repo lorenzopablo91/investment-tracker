@@ -4,20 +4,19 @@ import DollarCard from './components/DollarCard';
 import StockMarketCard from './components/StockMarketCard';
 import CryptoCard from './components/CryptoCard';
 import { getCryptoData } from './services/binance.service';
+import { amounts } from './types/data';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  // Dollar Card
-  const dollarsBanked: number = 1610.19;
-  const dollarCashed: number = 300;
-  const dollarInvested: number = 0;
-
-  // Stock Market Card
-  const dollarQuote: number = 1150;
-  const cedearsPesos: number = 616000;
-  const stockMarketPesos: number = 430000;
-  const cashPesos: number = 100000;
+  // Desestructuramos los datos del primer elemento del array (asumiendo que solo hay uno)
+  const {
+    dollarQuote,
+    dollarAmount: { dollarsBanked, dollarCashed, dollarInvested },
+    stockMarketAmount: { cedearsPesos, stockMarketPesos, cashPesos }
+  } = amounts[0];
+  
+  // Calculamos los valores en dólares
   const cedearsDolares = cedearsPesos / dollarQuote;
   const stockMarketDolares = stockMarketPesos / dollarQuote;
   const cashDolares = cashPesos / dollarQuote;
