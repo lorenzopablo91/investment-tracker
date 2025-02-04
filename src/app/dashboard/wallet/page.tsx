@@ -13,7 +13,8 @@ export default async function Page() {
   const {
     dollarQuote,
     dollarAmount: { dollarsBanked, dollarCashed, dollarInvested },
-    stockMarketAmount: { cedearsPesos, stockMarketPesos, cashPesos }
+    stockMarketAmount: { cedearsPesos, stockMarketPesos, cashPesos },
+    contributionLaly
   } = amounts[0];
   
   // Calculamos los valores en dólares
@@ -34,6 +35,7 @@ export default async function Page() {
         dollarTotal={dollarTotal}
         stockTotal={stockMarketTotal}
         cryptoTotal={cryptoTotal}
+        contributionLaly={contributionLaly}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -52,6 +52,7 @@ export interface TotalCardProps {
     dollarTotal: number;
     stockTotal: number;
     cryptoTotal: number;
+    contributionLaly: number;
 }
 
 export interface Balance {
@@ -76,5 +77,6 @@ export interface WalletData {
         cedearsPesos: number;
         stockMarketPesos: number;
         cashPesos: number;
-    }
+    };
+    contributionLaly: number;
 }

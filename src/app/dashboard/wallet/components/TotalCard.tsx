@@ -5,7 +5,7 @@ import Modal from '@/components/ui/modal';
 import { TotalCardProps } from '../types/interfaces';
 import ButtonRefresh from '@/components/ui/button-refresh';
 
-const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTotal }) => {
+const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTotal, contributionLaly }) => {
   const totalWallet = dollarTotal + stockTotal + cryptoTotal;
 
   const categories: Array<{ name: string; amount: number; color: string }> = [
@@ -26,7 +26,7 @@ const TotalCard: React.FC<TotalCardProps> = ({ dollarTotal, stockTotal, cryptoTo
               variant="info"
               icon={<InformationCircleIcon className="h-6 w-6" />}
             >
-              550 USD son de LALY♥
+              {contributionLaly} USD son de LALY♥ (o eran XD)
             </Modal>
           </div>
         </CardTitle>

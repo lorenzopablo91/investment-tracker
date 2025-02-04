@@ -6,10 +6,22 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { balanceData } from './types/data';
 
 export default function Page() {
-  const [selectedDate, setSelectedDate] = useState({
-    month: balanceData[0].month,
-    year: balanceData[0].year
-  });
+  const getCurrentMonthData = () => {
+    const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
+    const capitalizedMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
+    const currentYear = new Date().getFullYear().toString();
+    
+    const currentData = balanceData.find(
+      data => data.month === capitalizedMonth && data.year === currentYear
+    ) || balanceData[0];
+
+    return {
+      month: currentData.month,
+      year: currentData.year
+    };
+  };
+
+  const [selectedDate, setSelectedDate] = useState(getCurrentMonthData());
 
   const handleToggleSelection = (index: number) => {
     const currentMonthData = balanceData.find(
@@ -19,7 +31,6 @@ export default function Page() {
     if (currentMonthData) {
       const newExpenseDetails = [...currentMonthData.expenseDetails];
       newExpenseDetails[index].selected = !newExpenseDetails[index].selected;
-      // Actualizar el estado si es necesario
     }
   };
 
