@@ -1,21 +1,7 @@
 import { API_CONFIG } from '@/lib/api';
 import CryptoJS from 'crypto-js';
-import { AccountInfo, CryptoData, CryptoMetadata, CryptoPrice } from '../types/interfaces';
-
-const cryptoMetadata: CryptoMetadata = {
-    'BTC': {
-        name: 'Bitcoin',
-        color: 'bg-orange-500'
-    },
-    'ETH': {
-        name: 'Ethereum',
-        color: 'bg-indigo-500'
-    },
-    'BNB': {
-        name: 'Binance',
-        color: 'bg-yellow-500'
-    }
-};
+import { AccountInfo, CryptoData, CryptoPrice } from '../types/interfaces';
+import { cryptoMetadata, MIN_USD_VALUE } from '../types/data';
 
 export const getCryptoData = async (): Promise<CryptoData[]> => {
     try {
@@ -23,48 +9,88 @@ export const getCryptoData = async (): Promise<CryptoData[]> => {
         const symbols = Object.keys(balances);
         const prices = await getCryptoPrices(symbols);
 
-        return symbols
+        // Calcular valores en USD y filtrar
+        const cryptoData = symbols
             .filter(symbol => cryptoMetadata[symbol])
-            .map(symbol => ({
-                name: cryptoMetadata[symbol].name,
-                symbol: symbol,
-                amount: balances[symbol],
-                priceUSD: prices[symbol],
-                valueUSD: balances[symbol] * prices[symbol],
-                color: cryptoMetadata[symbol].color
-            }));
+            .map(symbol => {
+                const amount = balances[symbol];
+                const priceUSD = prices[symbol];
+                const valueUSD = amount * priceUSD;
+
+                return {
+                    name: cryptoMetadata[symbol].name,
+                    symbol: symbol,
+                    amount,
+                    priceUSD,
+                    valueUSD,
+                    color: cryptoMetadata[symbol].color
+                };
+            })
+            .filter(crypto => crypto.valueUSD >= MIN_USD_VALUE);
+
+        return cryptoData;
     } catch (error) {
-        // Mejorar el logging del error
         console.error('Error detallado:', error);
         if (error instanceof Error) {
             console.error('Mensaje del error:', error.message);
         }
-        throw error; // Lanzar el error original para ver más detalles
+        throw error;
     }
 }
 
 async function fetchCryptoPrice(symbol: string): Promise<CryptoPrice> {
-    const response = await fetch(
-        `${API_CONFIG.BINANCE.BASE_URL}/api/v3/ticker/price?symbol=${symbol}USDT`,
-        {
-            next: { revalidate: API_CONFIG.BINANCE.REVALIDATE_TIME },
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch price for ${symbol}`);
+    if (symbol === 'USDT') {
+        return {
+            symbol: 'USDTUSDT',
+            price: '1.00'  // USDT está diseñado para mantener paridad con USD
+        };
     }
 
-    return await response.json();
+    const url = `${API_CONFIG.BINANCE.BASE_URL}/api/v3/ticker/price?symbol=${symbol}USDT`;
+    
+    try {
+        const response = await fetch(url, {
+            next: { revalidate: API_CONFIG.BINANCE.REVALIDATE_TIME },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to fetch price for ${symbol}:`, {
+                status: response.status,
+                statusText: response.statusText,
+                url,
+                errorText
+            });
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(`Error fetching price for ${symbol}:`, error);
+        throw error;
+    }
 }
 
 export async function getCryptoPrices(symbols: string[]): Promise<Record<string, number>> {
     try {
-        const prices = await Promise.all(
-            symbols.map(symbol => fetchCryptoPrice(symbol))
+        console.log('Fetching prices for symbols:', symbols);
+        
+        const pricePromises = symbols.map(symbol => 
+            fetchCryptoPrice(symbol)
+                .catch(error => {
+                    console.error(`Failed to fetch ${symbol}:`, error);
+                    return null;
+                })
         );
 
-        const result = prices.reduce((acc, curr) => {
+        const prices = await Promise.all(pricePromises);
+        
+        const result = prices.reduce((acc, curr, index) => {
+            if (curr === null) {
+                console.warn(`Skipping ${symbols[index]} due to fetch error`);
+                return acc;
+            }
             const symbol = curr.symbol.replace('USDT', '');
             return {
                 ...acc,
@@ -72,10 +98,19 @@ export async function getCryptoPrices(symbols: string[]): Promise<Record<string,
             };
         }, {} as Record<string, number>);
 
+        if (Object.keys(result).length === 0) {
+            throw new Error('No cryptocurrency prices could be fetched');
+        }
+
+        console.log('Successfully fetched prices:', result);
         return result;
     } catch (error) {
-        console.error('Error fetching crypto prices:', error);
-        throw new Error('Unable to load cryptocurrency prices. Please try again later.');
+        console.error('Detailed error in getCryptoPrices:', {
+            error,
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined
+        });
+        throw error;
     }
 }
 
