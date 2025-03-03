@@ -8,7 +8,7 @@ const DollarCard: React.FC<DollarCardProps> = ({ banked, cashed, invested, total
   return (
     <Card className="w-full max-w-md bg-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold">Balance en Dólares</CardTitle>
+        <CardTitle className="text-xl font-bold">Balance Dólares</CardTitle>
         <CurrencyDollarIcon className="h-6 w-6 text-green-600" />
       </CardHeader>
       <CardContent>

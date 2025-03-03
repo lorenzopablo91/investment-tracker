@@ -3,17 +3,18 @@
 import React, { useState } from 'react';
 import MonthlyDetailsCard from './components/MonthlyDetailsCard';
 import { DatePicker } from '@/components/ui/date-picker';
-import { balanceData } from './types/data';
+import { BalanceData } from './types/data';
+import MonthlyBalanceCard from './components/MonthlyBalanceCard';
 
 export default function Page() {
   const getCurrentMonthData = () => {
     const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' });
     const capitalizedMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
     const currentYear = new Date().getFullYear().toString();
-    
-    const currentData = balanceData.find(
+
+    const currentData = BalanceData.find(
       data => data.month === capitalizedMonth && data.year === currentYear
-    ) || balanceData[0];
+    ) || BalanceData[0];
 
     return {
       month: currentData.month,
@@ -24,7 +25,7 @@ export default function Page() {
   const [selectedDate, setSelectedDate] = useState(getCurrentMonthData());
 
   const handleToggleSelection = (index: number) => {
-    const currentMonthData = balanceData.find(
+    const currentMonthData = BalanceData.find(
       data => data.month === selectedDate.month && data.year === selectedDate.year
     );
 
@@ -34,7 +35,8 @@ export default function Page() {
     }
   };
 
-  const currentMonthData = balanceData.find(
+  // Encuentra los datos del mes actual y añade grossSalary si no existe
+  const currentMonthData = BalanceData.find(
     data => data.month === selectedDate.month && data.year === selectedDate.year
   );
 
@@ -46,7 +48,12 @@ export default function Page() {
           onChange={setSelectedDate}
         />
       </div>
-
+      {currentMonthData && (
+        <MonthlyBalanceCard
+          data={currentMonthData}
+          onToggleSelection={handleToggleSelection}
+        />
+      )}
       {currentMonthData && (
         <MonthlyDetailsCard
           data={currentMonthData}

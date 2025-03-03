@@ -8,7 +8,7 @@ const StockMarketCard: React.FC<StockMarketCardProps> = ({ cedearsPesos, stockMa
   return (
     <Card className="w-full max-w-md bg-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold">Balance de Inversiones</CardTitle>
+        <CardTitle className="text-xl font-bold">Balance Acciones</CardTitle>
         <ArrowTrendingUpIcon className="h-6 w-6 text-blue-600" />
       </CardHeader>
       <CardContent>
@@ -37,7 +37,7 @@ const StockMarketCard: React.FC<StockMarketCardProps> = ({ cedearsPesos, stockMa
 
           <div className="flex justify-between items-center">
             <div>
-              <p className="font-medium">Acciones</p>
+              <p className="font-medium">Argy</p>
               <div className="text-sm text-muted-foreground">
                 <p className="text-xs">${stockMarketPesos.toLocaleString()} ARS</p>
               </div>

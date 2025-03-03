@@ -8,7 +8,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ cryptos, cryptoTotal }) => {
   return (
     <Card className="w-full max-w-md bg-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold">Balance de Criptomonedas</CardTitle>
+        <CardTitle className="text-xl font-bold">Balance Criptomonedas</CardTitle>
         <ArrowsRightLeftIcon className="h-6 w-6 text-orange-500" />
       </CardHeader>
       <CardContent>
@@ -53,7 +53,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({ cryptos, cryptoTotal }) => {
           </div>
           <div className="flex justify-between text-xs text-muted-foreground">
             {cryptos.map(crypto => (
-              <span key={crypto.symbol}>{crypto.symbol} <p>{(((crypto.valueUSD || 0 ) / cryptoTotal) * 100).toFixed(1)}%</p></span>
+              <span key={crypto.symbol}>{crypto.symbol} <p>{(((crypto.valueUSD || 0) / cryptoTotal) * 100).toFixed(1)}%</p></span>
             ))}
           </div>
         </div>

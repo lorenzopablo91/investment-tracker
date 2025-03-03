@@ -1,82 +1,27 @@
-import React, { useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from "@/lib/utils";
 import { MonthlyDetailsCardProps } from '../types/interfaces';
 
 export const MonthlyDetailsCard = ({ data, onToggleSelection }: MonthlyDetailsCardProps) => {
-  const financialSummary = useMemo(() => {
-    const totals = data.expenseDetails.reduce(
-      (acc, item) => {
-        if (item.type === 'income') {
-          acc.income += item.amountARS;
-        } else {
-          acc.expense += item.amountARS;
-          acc.amountUSD += item?.amountUSD || 0;
-        }
-        return acc;
-      },
-      { income: 0, expense: 0, amountUSD: 0 }
-    );
+  // Calcular los totales
+  const totalARS = data.expenseDetails.reduce((sum, item) => {
+    // Si es un ingreso, sumamos; si es un gasto, restamos
+    const multiplier = item.type === 'income' ? 1 : -1;
+    return sum + (item.amountARS * multiplier);
+  }, 0);
 
-    return {
-      ...totals,
-      result: totals.income - totals.expense,
-      expenseUSD: totals.amountUSD
-    };
-  }, [data]);
+  const totalUSD = data.expenseDetails.reduce((sum, item) => {
+    return sum + (item.amountUSD || 0);
+  }, 0);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Detalle de {data.month} {data.year}</CardTitle>
-        <CardDescription>
-          Desglose de ingresos, egresos y gastos del mes
-        </CardDescription>
+        <CardTitle>Gastos fijos mensuales</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="rounded-lg border p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Ingresos (ARS):</span>
-                <span className="font-medium text-green-600">
-                  {financialSummary.income.toLocaleString()}
-                </span>
-              </div>
-            </div>
-            <div className="rounded-lg border p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Egresos (ARS):</span>
-                <span className="font-medium text-red-600">
-                  {financialSummary.expense.toLocaleString()}
-                </span>
-              </div>
-            </div>
-            <div className="rounded-lg border p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Resultado (ARS):</span>
-                <span className={cn(
-                  "font-medium",
-                  financialSummary.result >= 0 ? "text-green-600" : "text-red-600"
-                )}>
-                  {financialSummary.result.toLocaleString()}
-                </span>
-              </div>
-            </div>
-            <div className="rounded-lg border p-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Consumos (USD):</span>
-                <span className={cn(
-                  "font-medium", "text-red-600"
-                )}>
-                  {financialSummary.expenseUSD.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div className="rounded-lg border p-4">
-            <h3 className="font-semibold mb-4 text-lg">Detalle de Movimientos</h3>
             <div>
               <div className="grid grid-cols-[30px_repeat(4,_1fr)] items-center mb-2">
                 <span></span>
@@ -121,10 +66,24 @@ export const MonthlyDetailsCard = ({ data, onToggleSelection }: MonthlyDetailsCa
                     </span>
                   </div>
                 ))}
+
+                {/* Fila de totales */}
+                <div className="grid grid-cols-[30px_repeat(4,_1fr)] items-center py-3 mt-2 border-t border-gray-200 font-semibold">
+                  <span></span>
+                  <span className="pl-2">Total</span>
+                  <span></span>
+                  <span className={cn(
+                    totalARS >= 0 ? "text-green-600" : "text-red-600"
+                  )}>
+                    {Math.abs(totalARS).toLocaleString()}
+                  </span>
+                  <span className="text-red-600">
+                    {totalUSD.toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </CardContent>
     </Card>
